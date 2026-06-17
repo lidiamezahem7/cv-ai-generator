@@ -1,8 +1,7 @@
 import os
 import openai
 
-# 1) Récupérer la clé API OpenAI depuis la variable d'environnement
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai_api_key = os.getenv("OPENAI_API_KEY")
 
 async def generate_cv(text: str) -> str:
     prompt = f"""
@@ -12,8 +11,7 @@ async def generate_cv(text: str) -> str:
     Génère un CV structuré avec sections : Résumé, Expérience, Compétences, Formation.
     """
 
-    # 2) Appeler l'API OpenAI en mode asynchrone
-    client = openai.OpenAI()
+    client = openai.OpenAI(api_key=openai_api_key)
     response = await client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": prompt}],
@@ -21,5 +19,4 @@ async def generate_cv(text: str) -> str:
         temperature=0.7,
     )
 
-    # 3) Retourner le texte généré
     return response.choices[0].message.content.strip()
