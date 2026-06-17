@@ -3,8 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from ai_service import generate_cv
 import logging
 from openai import OpenAIError
-import os
-print("OPENAI_API_KEY =", os.getenv("OPENAI_API_KEY"))
 
 app = FastAPI()
 

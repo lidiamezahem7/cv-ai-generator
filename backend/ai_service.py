@@ -13,7 +13,8 @@ async def generate_cv(text: str) -> str:
     """
 
     # 2) Appeler l'API OpenAI en mode asynchrone
-    response = await openai.ChatCompletion.acreate(
+    client = openai.OpenAI()
+    response = await client.chat.completions.acreate(
         model="gpt-4",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=800,
