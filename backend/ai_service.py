@@ -1,25 +1,21 @@
-def rewrite_cv(text: str) -> str:
-    lines = [l.strip() for l in text.splitlines() if l.strip()]
-    cleaned = "\n".join(lines)
+import os
+import openai
 
-    result = f"""
-Résumé professionnel
---------------------
-Développeur(se) orienté(e) IA / fullstack, capable de concevoir et déployer des applications modernes.
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-Expérience
-----------
-{cleaned}
+async def generate_cv(text: str) -> str:
+    prompt = f"""
+    Tu es un assistant IA qui génère un CV professionnel complet à partir du texte brut suivant :
+    {text}
 
-Compétences clés
-----------------
-- Développement web (React, .NET, Python)
-- APIs REST
-- Cloud & CI/CD
-- IA appliquée
+    Génère un CV structuré avec sections : Résumé, Expérience, Compétences, Formation.
+    """
 
-CV original (nettoyé)
----------------------
-{cleaned}
-"""
-    return result.strip()
+    response = await openai.ChatCompletion.acreate(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=800,
+        temperature=0.7,
+    )
+
+    return response.choices[0].message.content.strip()

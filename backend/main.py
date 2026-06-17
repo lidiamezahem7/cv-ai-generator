@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from ai_service import rewrite_cv
+from ai_service import generate_cv
 
 app = FastAPI()
 
@@ -13,10 +13,10 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return {"message": "API CV IA opérationnelle"}
+    return {"message": "API CV IA opérationnelle avec OpenAI"}
 
-@app.post("/optimize")
-async def optimize_cv(file: UploadFile = File(...)):
+@app.post("/generate")
+async def generate(file: UploadFile = File(...)):
     text = (await file.read()).decode("utf-8", errors="ignore")
-    optimized = rewrite_cv(text)
-    return {"optimized": optimized}
+    result = await generate_cv(text)
+    return {"cv": result}
