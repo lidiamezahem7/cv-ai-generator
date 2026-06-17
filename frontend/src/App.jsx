@@ -8,7 +8,7 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("https://cv-ai-backend.onrender.com/optimize", {
+    const res = await fetch("https://cv-ai-generator-1.onrender.com/optimize", {
       method: "POST",
       body: formData,
     });
