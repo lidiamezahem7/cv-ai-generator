@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from ai_service import generate_cv
 
@@ -18,5 +18,8 @@ def home():
 @app.post("/generate")
 async def generate(file: UploadFile = File(...)):
     text = (await file.read()).decode("utf-8", errors="ignore")
-    result = await generate_cv(text)
-    return {"cv": result}
+    try:
+        result = await generate_cv(text)
+        return {"cv": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
