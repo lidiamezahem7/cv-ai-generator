@@ -1,10 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from ai_service import generate_cv
-import openai
 import logging
-import os 
-
+from openai import OpenAIError
+import os
 print("OPENAI_API_KEY =", os.getenv("OPENAI_API_KEY"))
 
 app = FastAPI()
@@ -28,7 +27,7 @@ async def generate(file: UploadFile = File(...)):
     try:
         result = await generate_cv(text)
         return {"cv": result}
-    except openai.error.OpenAIError as oe:
+    except OpenAIError as oe:
         logging.error(f"OpenAI API error: {oe}")
         raise HTTPException(status_code=500, detail=f"OpenAI API error: {oe}")
     except Exception as e:
